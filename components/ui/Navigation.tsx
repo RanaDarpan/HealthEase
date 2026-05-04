@@ -64,7 +64,7 @@ export function Navigation() {
                                 <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                             </div>
                             <span className="text-lg sm:text-xl font-bold gradient-text">
-                                HealthEase
+                                MindEase
                             </span>
                         </Link>
 

@@ -1,13 +1,13 @@
 {
-    "name": "healthease",
+    "name": "mindease",
     "version": "1.0.0",
-    "description": "HealthEase - AI-powered mental wellness companion with anonymous chat, mood tracking, breathing exercises, and crisis support",
+    "description": "MindEase - AI-powered mental wellness companion with anonymous chat, mood tracking, breathing exercises, and crisis support",
     "private": true,
-    "author": "HealthEase Team",
+    "author": "MindEase Team",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/RanaDarpan/HealthEase.git"
+        "url": "https://github.com/RanaDarpan/MindEase.git"
     },
     "scripts": {
         "dev": "next dev",

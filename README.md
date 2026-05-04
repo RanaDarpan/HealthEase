@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/HealthEase-Mental%20Wellness-0ea5e9?style=for-the-badge&logo=heart&logoColor=white" alt="HealthEase" />
+  <img src="https://img.shields.io/badge/MindEase-Mental%20Wellness-0ea5e9?style=for-the-badge&logo=heart&logoColor=white" alt="MindEase" />
 </p>
 
-<h1 align="center">🧠 HealthEase</h1>
+<h1 align="center">🧠 MindEase</h1>
 
 <p align="center">
   <strong>Your Mental Wellness Companion — Anonymous, AI-Powered, Available 24/7</strong>
@@ -33,9 +33,9 @@
 
 ## 🌟 Overview
 
-**HealthEase** is a comprehensive mental health support platform that provides anonymous, AI-powered wellness tools. Built with modern web technologies, it offers a safe space for users to chat with an empathetic AI companion, track their mood, practice guided breathing exercises, maintain a private journal, and access crisis resources — all without requiring any personal identification.
+**MindEase** is a comprehensive mental health support platform that provides anonymous, AI-powered wellness tools. Built with modern web technologies, it offers a safe space for users to chat with an empathetic AI companion, track their mood, practice guided breathing exercises, maintain a private journal, and access crisis resources — all without requiring any personal identification.
 
-> ⚠️ **Important Disclaimer:** HealthEase is a supportive tool for daily mental wellness. It is **not** a replacement for professional mental health care. If you are experiencing a crisis, please contact emergency services or call **988** (Suicide & Crisis Lifeline).
+> ⚠️ **Important Disclaimer:** MindEase is a supportive tool for daily mental wellness. It is **not** a replacement for professional mental health care. If you are experiencing a crisis, please contact emergency services or call **988** (Suicide & Crisis Lifeline).
 
 ---
 
@@ -117,8 +117,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/RanaDarpan/HealthEase.git
-   cd HealthEase
+   git clone https://github.com/RanaDarpan/MindEase.git
+   cd MindEase
    ```
 
 2. **Install dependencies**
@@ -146,11 +146,11 @@
 
 ### Deploy to Vercel (Recommended)
 
-HealthEase is optimized for deployment on [Vercel](https://vercel.com).
+MindEase is optimized for deployment on [Vercel](https://vercel.com).
 
 #### Option 1: One-Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/RanaDarpan/HealthEase&env=MONGODB_URI,NEXTAUTH_SECRET,NEXTAUTH_URL,ENCRYPTION_KEY,OPENAI_API_KEY&envDescription=Required%20environment%20variables%20for%20HealthEase&project-name=healthease)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/RanaDarpan/MindEase&env=MONGODB_URI,NEXTAUTH_SECRET,NEXTAUTH_URL,ENCRYPTION_KEY,OPENAI_API_KEY&envDescription=Required%20environment%20variables%20for%20MindEase&project-name=MindEase)
 
 #### Option 2: Vercel CLI
 
@@ -180,7 +180,7 @@ vercel --prod
 4. Add all required environment variables in the Vercel dashboard
 5. Click **Deploy**
 
-> **Important:** Set `NEXTAUTH_URL` to your production domain (e.g., `https://healthease.vercel.app`)
+> **Important:** Set `NEXTAUTH_URL` to your production domain (e.g., `https://MindEase.vercel.app`)
 
 ### Environment Variables on Vercel
 
@@ -190,7 +190,7 @@ In your Vercel project dashboard → **Settings** → **Environment Variables**,
 |----------|-------|
 | `MONGODB_URI` | Your MongoDB Atlas connection string |
 | `NEXTAUTH_SECRET` | Generate with: `openssl rand -base64 32` |
-| `NEXTAUTH_URL` | Your production URL (e.g., `https://healthease.vercel.app`) |
+| `NEXTAUTH_URL` | Your production URL (e.g., `https://MindEase.vercel.app`) |
 | `ENCRYPTION_KEY` | Generate with: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 | `OPENAI_API_KEY` | Your OpenAI API key |
 | `GROQ_API_KEY` | *(Optional)* Groq API key for fallback |
@@ -200,7 +200,7 @@ In your Vercel project dashboard → **Settings** → **Environment Variables**,
 ## 📁 Project Structure
 
 ```
-HealthEase/
+MindEase/
 ├── app/                          # Next.js App Router pages
 │   ├── api/                      # API routes
 │   │   ├── auth/                 # Authentication endpoints
@@ -286,7 +286,7 @@ Copy `.env.example` to `.env` and fill in your values:
 
 ```env
 # MongoDB Atlas Connection
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/healthease
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/MindEase
 
 # NextAuth.js — Authentication
 NEXTAUTH_SECRET=<generate-with-openssl-rand-base64-32>
@@ -359,7 +359,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ## 🎨 Design System
 
-HealthEase uses a custom design system built on Tailwind CSS with:
+MindEase uses a custom design system built on Tailwind CSS with:
 
 - **Color Palette:** `calm` (blue), `peace` (purple), `soothe` (green) — carefully chosen calming tones
 - **Glassmorphism:** Frosted glass effect with `backdrop-filter: blur()`
@@ -428,5 +428,5 @@ If you or someone you know is in crisis, please reach out:
 ---
 
 <p align="center">
-  Made with ❤️ by the <strong>HealthEase Team</strong> — for mental wellness, for everyone.
+  Made with ❤️ by the <strong>MindEase Team</strong> — for mental wellness, for everyone.
 </p>

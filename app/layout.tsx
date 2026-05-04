@@ -9,10 +9,10 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "HealthEase - Your Mental Wellness Companion",
+    title: "MindEase - Your Mental Wellness Companion",
     description: "Safe, anonymous mental health support available 24/7. AI-powered chat, mood tracking, breathing exercises, and crisis support.",
     keywords: ["mental health", "support", "anonymous", "wellbeing", "crisis help", "therapy", "counseling", "mood tracking"],
-    authors: [{ name: "HealthEase Team" }],
+    authors: [{ name: "MindEase Team" }],
 };
 
 export const viewport: Viewport = {

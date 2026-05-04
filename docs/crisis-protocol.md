@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document defines the complete crisis intervention protocol for HealthEase's mental health chatbot. The protocol uses a multi-layered approach combining keyword detection, sentiment analysis, and contextual awareness to ensure user safety.
+This document defines the complete crisis intervention protocol for MindEase's mental health chatbot. The protocol uses a multi-layered approach combining keyword detection, sentiment analysis, and contextual awareness to ensure user safety.
 
 ## Crisis Detection Flow
 

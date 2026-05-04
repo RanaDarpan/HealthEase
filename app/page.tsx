@@ -66,7 +66,7 @@ const testimonials = [
     {
         name: 'Sarah M.',
         role: 'College Student',
-        content: 'HealthEase has been a lifeline during stressful times. The anonymous chat feature lets me open up without fear of judgment.',
+        content: 'MindEase has been a lifeline during stressful times. The anonymous chat feature lets me open up without fear of judgment.',
         avatar: '👩‍🎓',
         rating: 5,
     },
@@ -88,8 +88,8 @@ const testimonials = [
 
 const faqs = [
     {
-        question: 'Is HealthEase really anonymous?',
-        answer: 'Yes! You can use HealthEase completely anonymously without creating an account. No email required, no personal information collected. Your privacy is our top priority.',
+        question: 'Is MindEase really anonymous?',
+        answer: 'Yes! You can use MindEase completely anonymously without creating an account. No email required, no personal information collected. Your privacy is our top priority.',
     },
     {
         question: 'How does the AI chat work?',
@@ -100,12 +100,12 @@ const faqs = [
         answer: 'Absolutely. All conversations and mood data are encrypted with AES-256 encryption. Your data is never shared with third parties and you can delete it anytime.',
     },
     {
-        question: 'Can HealthEase replace therapy?',
-        answer: 'No. HealthEase is a supportive tool for daily mental wellness, not a replacement for professional mental health care. If you\'re in crisis, please contact emergency services or a crisis helpline.',
+        question: 'Can MindEase replace therapy?',
+        answer: 'No. MindEase is a supportive tool for daily mental wellness, not a replacement for professional mental health care. If you\'re in crisis, please contact emergency services or a crisis helpline.',
     },
     {
-        question: 'Is HealthEase free?',
-        answer: 'Yes! HealthEase is completely free to use. We believe mental health support should be accessible to everyone, anytime they need it.',
+        question: 'Is MindEase free?',
+        answer: 'Yes! MindEase is completely free to use. We believe mental health support should be accessible to everyone, anytime they need it.',
     },
 ];
 
@@ -336,7 +336,7 @@ export default function HomePage() {
                             <span className="gradient-text">Questions</span>
                         </h2>
                         <p className="text-lg text-gray-600 dark:text-gray-400">
-                            Everything you need to know about HealthEase
+                            Everything you need to know about MindEase
                         </p>
                     </div>
 
@@ -361,7 +361,7 @@ export default function HomePage() {
                                 <span className="gradient-text">Wellness Journey</span>?
                             </h2>
                             <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-                                Join thousands of users who trust HealthEase for their mental wellness.
+                                Join thousands of users who trust MindEase for their mental wellness.
                                 Anonymous, secure, and always available.
                             </p>
                             <div className="flex flex-wrap gap-4 justify-center">
@@ -394,7 +394,7 @@ export default function HomePage() {
                                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-calm-500 to-peace-500 flex items-center justify-center shadow-glow">
                                     <Heart className="w-6 h-6 text-white" fill="white" />
                                 </div>
-                                <span className="text-2xl font-bold">HealthEase</span>
+                                <span className="text-2xl font-bold">MindEase</span>
                             </div>
                             <p className="text-gray-400 mb-6 leading-relaxed">
                                 Your safe, anonymous space for mental wellness. Available 24/7 to support your journey
@@ -458,7 +458,7 @@ export default function HomePage() {
                     <div className="border-t border-gray-700 pt-8">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <p className="text-gray-400 text-sm text-center md:text-left">
-                                © {new Date().getFullYear()} HealthEase. All rights reserved. Made with ❤️ for mental wellness.
+                                © {new Date().getFullYear()} MindEase. All rights reserved. Made with ❤️ for mental wellness.
                             </p>
                             <div className="flex gap-6 text-sm text-gray-400">
                                 <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
@@ -482,13 +482,13 @@ function DismissibleNotice() {
     const [dismissed, setDismissed] = useState(true); // Start hidden to prevent flash
 
     useEffect(() => {
-        const isDismissed = localStorage.getItem('healthease-notice-dismissed');
+        const isDismissed = localStorage.getItem('mindease-notice-dismissed');
         setDismissed(!!isDismissed);
     }, []);
 
     const handleDismiss = () => {
         setDismissed(true);
-        localStorage.setItem('healthease-notice-dismissed', 'true');
+        localStorage.setItem('mindease-notice-dismissed', 'true');
     };
 
     if (dismissed) return null;
@@ -500,7 +500,7 @@ function DismissibleNotice() {
                     <Sparkles className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
                         <p className="text-xs text-yellow-900 dark:text-yellow-200 leading-relaxed">
-                            <strong>Important:</strong> HealthEase is not a replacement for professional care.
+                            <strong>Important:</strong> MindEase is not a replacement for professional care.
                             In crisis? Call 988 immediately.
                         </p>
                     </div>
