@@ -160,7 +160,7 @@ export default function HomePage() {
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6 animate-float">
                             <Sparkles className="w-4 h-4 text-calm-600 dark:text-calm-400" />
                             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Trusted by 10,000+ users worldwide
+                                Ease Your Mind
                             </span>
                         </div>
 
@@ -225,10 +225,10 @@ export default function HomePage() {
                 <div className="container mx-auto">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
                         {[
-                            { icon: Users, label: 'Active Users', value: '10,000+', color: 'from-calm-500 to-calm-600' },
-                            { icon: MessageCircle, label: 'Conversations', value: '50,000+', color: 'from-peace-500 to-peace-600' },
+                            { icon: Users, label: 'Active Users', value: '10+', color: 'from-calm-500 to-calm-600' },
+                            { icon: MessageCircle, label: 'Conversations', value: '50+', color: 'from-peace-500 to-peace-600' },
                             { icon: Clock, label: 'Availability', value: '24/7', color: 'from-soothe-500 to-soothe-600' },
-                            { icon: TrendingUp, label: 'Success Rate', value: '95%', color: 'from-purple-500 to-pink-600' },
+                            { icon: TrendingUp, label: 'Success Rate', value: '85%+', color: 'from-purple-500 to-pink-600' },
                         ].map((stat, index) => (
                             <GlassCard
                                 key={index}
