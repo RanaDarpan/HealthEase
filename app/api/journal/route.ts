@@ -126,3 +126,46 @@ export async function GET(req: NextRequest) {
         );
     }
 }
+
+/**
+ * DELETE /api/journal
+ * Delete a journal entry by id
+ */
+export async function DELETE(req: NextRequest) {
+    try {
+        const session = await getServerSession(authOptions);
+
+        if (!session?.user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const userId = (session.user as any).id;
+        const { searchParams } = new URL(req.url);
+        const entryId = searchParams.get('id');
+
+        if (!entryId) {
+            return NextResponse.json({ error: 'Entry ID is required' }, { status: 400 });
+        }
+
+        await connectDB();
+
+        // Only allow deleting own entries
+        const entry = await JournalEntry.findOneAndDelete({
+            _id: entryId,
+            userId,
+        });
+
+        if (!entry) {
+            return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true });
+
+    } catch (error) {
+        console.error('Journal delete API error:', error);
+        return NextResponse.json(
+            { error: 'Failed to delete journal entry' },
+            { status: 500 }
+        );
+    }
+}

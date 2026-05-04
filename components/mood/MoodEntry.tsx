@@ -104,12 +104,12 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
     };
 
     return (
-        <Card className="p-6">
+        <Card className="p-6 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700">
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Mood Score Selector */}
                 <div>
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                             How are you feeling?
                         </h3>
                         {getMoodIcon()}
@@ -123,7 +123,7 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
                             max="10"
                             value={moodScore}
                             onChange={(e) => setMoodScore(parseInt(e.target.value))}
-                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-calm-600"
+                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-calm-600"
                             aria-label="Mood score slider"
                         />
 
@@ -136,7 +136,7 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
                         </div>
 
                         {/* Score Markers */}
-                        <div className="flex justify-between text-xs text-gray-500 px-1">
+                        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 px-1">
                             <span>1 (Worst)</span>
                             <span>10 (Best)</span>
                         </div>
@@ -145,7 +145,7 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
 
                 {/* Notes */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         What's on your mind? (Optional)
                     </label>
                     <Textarea
@@ -153,13 +153,13 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Share your thoughts... This is private and encrypted."
                         rows={4}
-                        className="w-full"
+                        className="w-full bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                     />
                 </div>
 
                 {/* Triggers */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         What contributed to this mood?
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -168,9 +168,9 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
                                 key={trigger}
                                 type="button"
                                 onClick={() => toggleTrigger(trigger)}
-                                className={`px-3 py-1 rounded-full text-sm transition-all ${selectedTriggers.includes(trigger)
-                                        ? 'bg-orange-500 text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                className={`px-3 py-1.5 rounded-full text-sm transition-all font-medium ${selectedTriggers.includes(trigger)
+                                        ? 'bg-orange-500 text-white shadow-md'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600'
                                     }`}
                             >
                                 {trigger}
@@ -181,7 +181,7 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
 
                 {/* Activities */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         What did you do today?
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -190,9 +190,9 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
                                 key={activity}
                                 type="button"
                                 onClick={() => toggleActivity(activity)}
-                                className={`px-3 py-1 rounded-full text-sm transition-all ${selectedActivities.includes(activity)
-                                        ? 'bg-soothe-500 text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                className={`px-3 py-1.5 rounded-full text-sm transition-all font-medium ${selectedActivities.includes(activity)
+                                        ? 'bg-soothe-500 text-white shadow-md'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600'
                                     }`}
                             >
                                 {activity}
@@ -205,7 +205,7 @@ export function MoodEntry({ onSubmit }: MoodEntryProps) {
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-calm-600 hover:bg-calm-700 text-white"
+                    className="w-full bg-gradient-to-r from-calm-600 to-peace-600 hover:from-calm-700 hover:to-peace-700 text-white shadow-lg hover:shadow-glow transition-all"
                 >
                     {isSubmitting ? 'Saving...' : 'Save Mood Entry'}
                 </Button>

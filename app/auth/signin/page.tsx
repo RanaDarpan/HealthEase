@@ -4,22 +4,23 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Heart, Mail, Lock, UserX, Loader2, Eye, EyeOff } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { FloatingElement } from '@/components/ui/FloatingElement';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Heart, Mail, Lock, Eye, EyeOff, UserX, Loader2, Sparkles } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function SignInPage() {
-    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [isAnonymousLoading, setIsAnonymousLoading] = useState(false);
+    const router = useRouter();
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setError('');
 
         try {
             const result = await signIn('credentials', {
@@ -29,182 +30,155 @@ export default function SignInPage() {
             });
 
             if (result?.error) {
-                setError('Invalid email or password');
+                toast.error('Invalid email or password');
             } else {
+                toast.success('Welcome back! 💙');
                 router.push('/dashboard');
             }
-        } catch (err) {
-            setError('An error occurred. Please try again.');
+        } catch (error) {
+            toast.error('Something went wrong. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleAnonymous = async () => {
-        setIsLoading(true);
+    const handleAnonymousLogin = async () => {
+        setIsAnonymousLoading(true);
+
         try {
             const result = await signIn('credentials', {
-                isAnonymous: 'true',
+                anonymous: 'true',
                 redirect: false,
             });
 
-            if (result?.ok) {
-                router.push('/chat');
+            if (result?.error) {
+                toast.error('Failed to start anonymous session');
+            } else {
+                toast.success('Anonymous session started');
+                router.push('/dashboard');
             }
-        } catch (err) {
-            setError('Failed to create anonymous session');
+        } catch (error) {
+            toast.error('Something went wrong. Please try again.');
         } finally {
-            setIsLoading(false);
+            setIsAnonymousLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-calm-50 via-white to-peace-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 overflow-hidden relative">
-            {/* Floating Background Elements */}
-            <FloatingElement
-                className="top-10 left-10"
-                variant="circle"
-                size="lg"
-                color="from-calm-300/30 to-peace-300/30"
-                delay={0}
-            />
-            <FloatingElement
-                className="top-40 right-20"
-                variant="blob"
-                size="xl"
-                color="from-peace-300/20 to-soothe-300/20"
-                delay={2}
-            />
-            <FloatingElement
-                className="bottom-20 left-1/4"
-                variant="circle"
-                size="md"
-                color="from-soothe-300/25 to-calm-300/25"
-                delay={4}
-            />
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-calm-50 via-peace-50 to-soothe-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+            {/* Background decoration */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-calm-300/20 dark:bg-calm-600/10 blur-3xl animate-float" />
+                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-peace-300/20 dark:bg-peace-600/10 blur-3xl animate-float-slow" />
+            </div>
 
-            {/* Main Content */}
-            <div className="w-full max-w-md relative z-10">
+            <div className="w-full max-w-md relative z-10 animate-fadeInUp">
                 {/* Logo */}
-                <Link href="/" className="flex items-center justify-center gap-2 mb-8 group">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-calm-500 to-peace-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-glow">
-                        <Heart className="w-7 h-7 text-white" fill="white" />
-                    </div>
-                    <span className="text-3xl font-bold gradient-text">HealthEase</span>
-                </Link>
-
-                {/* Signin Card */}
-                <GlassCard className="p-8 animate-fadeInUp">
-                    <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                            Welcome Back
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            Sign in to continue your wellness journey
-                        </p>
-                    </div>
-
-                    {error && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                            <p className="text-sm text-red-600 dark:text-red-400 text-center">{error}</p>
+                <div className="text-center mb-8">
+                    <Link href="/" className="inline-flex items-center gap-2 group">
+                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-calm-500 to-peace-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-glow">
+                            <Heart className="w-7 h-7 text-white" />
                         </div>
-                    )}
+                    </Link>
+                    <h1 className="text-3xl font-bold gradient-text mt-4">Welcome Back</h1>
+                    <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to your safe space</p>
+                </div>
 
-                    <form onSubmit={handleSignIn} className="space-y-5">
-                        {/* Email Input */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Email
-                            </label>
-                            <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-calm-500 dark:focus:border-calm-400 focus:ring-4 focus:ring-calm-500/20 transition-all outline-none"
-                                    placeholder="you@example.com"
-                                />
+                <Card className="glass-card border border-white/20 dark:border-gray-700/50 shadow-glass-lg">
+                    <CardContent className="p-6 space-y-6">
+                        <form onSubmit={handleSignIn} className="space-y-4">
+                            {/* Email */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="your@email.com"
+                                        className="pl-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Password */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <Input
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                        className="pl-10 pr-10 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                    >
+                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <Button
+                                type="submit"
+                                disabled={isLoading}
+                                className="w-full bg-gradient-to-r from-calm-600 to-peace-600 hover:from-calm-700 hover:to-peace-700 text-white shadow-lg hover:shadow-glow transition-all"
+                            >
+                                {isLoading ? (
+                                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Signing In...</>
+                                ) : (
+                                    'Sign In'
+                                )}
+                            </Button>
+                        </form>
+
+                        {/* Divider */}
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-gray-200 dark:border-gray-700" />
+                            </div>
+                            <div className="relative flex justify-center text-xs">
+                                <span className="px-2 bg-white/70 dark:bg-gray-800/70 text-gray-500 dark:text-gray-400 backdrop-blur-sm">
+                                    or continue anonymously
+                                </span>
                             </div>
                         </div>
 
-                        {/* Password Input */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Password
-                            </label>
-                            <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    className="w-full pl-12 pr-12 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-calm-500 dark:focus:border-calm-400 focus:ring-4 focus:ring-calm-500/20 transition-all outline-none"
-                                    placeholder="••••••••"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                                >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Sign In Button */}
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-calm-600 to-peace-600 hover:from-calm-700 hover:to-peace-700 text-white font-semibold shadow-lg hover:shadow-glow transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                        {/* Anonymous Login */}
+                        <Button
+                            onClick={handleAnonymousLogin}
+                            disabled={isAnonymousLoading}
+                            variant="outline"
+                            className="w-full border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-calm-400 dark:hover:border-calm-500 hover:text-calm-700 dark:hover:text-calm-400 transition-all"
                         >
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Signing in...
-                                </>
+                            {isAnonymousLoading ? (
+                                <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Starting session...</>
                             ) : (
-                                'Sign In'
+                                <><UserX className="w-4 h-4 mr-2" /> Stay Anonymous</>
                             )}
-                        </button>
-                    </form>
+                        </Button>
 
-                    {/* Divider */}
-                    <div className="relative my-8">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
-                        </div>
-                        <div className="relative flex justify-center text-sm">
-                            <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                                Or continue as
-                            </span>
-                        </div>
-                    </div>
+                        {/* Sign Up Link */}
+                        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+                            Don't have an account?{' '}
+                            <Link href="/auth/signup" className="text-calm-600 dark:text-calm-400 font-medium hover:underline">
+                                Sign Up
+                            </Link>
+                        </p>
+                    </CardContent>
+                </Card>
 
-                    {/* Anonymous Button */}
-                    <button
-                        onClick={handleAnonymous}
-                        disabled={isLoading}
-                        className="w-full py-3 px-6 rounded-xl border-2 border-gray-300 dark:border-gray-600 hover:border-calm-400 dark:hover:border-calm-500 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-                    >
-                        <UserX className="w-5 h-5" />
-                        Anonymous User
-                    </button>
-
-                    {/* Sign Up Link */}
-                    <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
-                        Don't have an account?{' '}
-                        <Link href="/auth/signup" className="text-calm-600 dark:text-calm-400 hover:text-calm-700 dark:hover:text-calm-300 font-semibold transition-colors">
-                            Sign up
-                        </Link>
-                    </p>
-                </GlassCard>
-
-                {/* Privacy Note */}
-                <p className="text-center text-xs text-gray-500 dark:text-gray-500 mt-6">
-                    Your data is encrypted and secure. We prioritize your privacy.
+                {/* Security Note */}
+                <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-4 flex items-center justify-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    Your data is encrypted and private
                 </p>
             </div>
         </div>

@@ -23,6 +23,11 @@ export interface IChatSession extends Document {
     userId: mongoose.Types.ObjectId;
     sessionId: string; // Unique session identifier
     messages: IMessage[];
+    conversationSummary?: string; // Summary of the conversation for context
+    userPatterns?: {
+        commonTopics: string[]; // Topics frequently discussed
+        emotionalThemes: string[]; // Recurring emotional themes
+    };
     startedAt: Date;
     lastMessageAt: Date;
     crisisCount: number; // Number of crisis messages in this session
@@ -88,6 +93,14 @@ const ChatSessionSchema = new Schema<IChatSession>({
         index: true,
     },
     messages: [MessageSchema],
+    conversationSummary: {
+        type: String,
+        // Summary of conversation for long-term context
+    },
+    userPatterns: {
+        commonTopics: [String],
+        emotionalThemes: [String],
+    },
     startedAt: {
         type: Date,
         default: Date.now,
@@ -116,8 +129,8 @@ const ChatSessionSchema = new Schema<IChatSession>({
 });
 
 // Indexes for performance
+// Note: sessionId index is defined in schema (line 88)
 ChatSessionSchema.index({ userId: 1, lastMessageAt: -1 });
-ChatSessionSchema.index({ sessionId: 1 });
 ChatSessionSchema.index({ crisisCount: -1 });
 
 // Update lastMessageAt on message addition

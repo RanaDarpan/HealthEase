@@ -2,15 +2,33 @@ import crypto from 'crypto';
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || '';
 
-if (!ENCRYPTION_KEY) {
-    console.warn('⚠️  ENCRYPTION_KEY not set. Encryption will not work properly.');
-}
+/**
+ * Lazy-evaluated encryption key buffer.
+ * Validates key length at usage time, not at module load time,
+ * so the app doesn't crash on startup when env vars are missing.
+ */
+let _keyBuffer: Buffer | null = null;
 
-// Convert hex key to Buffer
-const KEY = Buffer.from(ENCRYPTION_KEY, 'hex');
+function getKey(): Buffer {
+    if (_keyBuffer) return _keyBuffer;
 
-if (KEY.length !== 32) {
-    console.warn('⚠️  ENCRYPTION_KEY must be 32 bytes (64 hex characters)');
+    if (!ENCRYPTION_KEY) {
+        throw new Error(
+            '❌ ENCRYPTION_KEY environment variable is not set. ' +
+            'Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"'
+        );
+    }
+
+    const buf = Buffer.from(ENCRYPTION_KEY, 'hex');
+
+    if (buf.length !== 32) {
+        throw new Error(
+            `❌ ENCRYPTION_KEY must be exactly 32 bytes (64 hex characters). Got ${buf.length} bytes.`
+        );
+    }
+
+    _keyBuffer = buf;
+    return _keyBuffer;
 }
 
 /**
@@ -19,6 +37,7 @@ if (KEY.length !== 32) {
  */
 export function encrypt(text: string): string {
     try {
+        const KEY = getKey();
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv('aes-256-gcm', KEY, iv);
         let encrypted = cipher.update(text, 'utf8', 'hex');
@@ -36,6 +55,7 @@ export function encrypt(text: string): string {
  */
 export function decrypt(encryptedData: string): string {
     try {
+        const KEY = getKey();
         const parts = encryptedData.split(':');
         if (parts.length !== 3) {
             throw new Error('Invalid encrypted data format');

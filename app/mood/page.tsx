@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { MoodEntry } from '@/components/mood/MoodEntry';
 import { Card } from '@/components/ui/card';
 import { TrendingUp, TrendingDown, Minus, Heart, Calendar, Activity, Sparkles, ChevronRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface MoodData {
     id: string;
@@ -49,13 +50,13 @@ export default function MoodPage() {
             if (response.ok) {
                 // Refresh history
                 fetchMoodHistory();
-                alert('Mood entry saved successfully!');
+                toast.success('Mood entry saved! Keep tracking your journey 💙');
             } else {
                 throw new Error('Failed to save mood entry');
             }
         } catch (error) {
             console.error('Error saving mood:', error);
-            alert('Failed to save mood entry. Please try again.');
+            toast.error('Failed to save mood entry. Please try again.');
         }
     };
 

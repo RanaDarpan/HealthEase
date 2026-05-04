@@ -45,6 +45,7 @@ const UserSchema = new Schema<IUser>({
             },
             message: 'Invalid email format',
         },
+        index: true, // Explicit index for email queries
     },
     password: {
         type: String,
@@ -58,6 +59,7 @@ const UserSchema = new Schema<IUser>({
         type: String,
         unique: true,
         sparse: true,
+        // Index automatically created by unique: true
     },
     createdAt: {
         type: Date,
@@ -93,10 +95,8 @@ const UserSchema = new Schema<IUser>({
     timestamps: true,
 });
 
-// Index for performance
-UserSchema.index({ email: 1 });
-UserSchema.index({ anonymousId: 1 });
-UserSchema.index({ lastActive: 1 });
+// Note: email and anonymousId indexes are defined in schema
+// lastActive TTL index is defined below
 
 // Pre-save hook to hash password
 UserSchema.pre('save', async function (next) {

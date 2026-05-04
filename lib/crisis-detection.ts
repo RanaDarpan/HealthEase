@@ -153,12 +153,14 @@ export function detectCrisisSentiment(
  * @param text - User's message
  * @param sentimentScore - Optional sentiment score
  * @param sentimentLabel - Optional sentiment label
+ * @param userCrisisHistory - Optional count of past crisis events
  * @returns Complete crisis detection result
  */
 export function detectCrisis(
     text: string,
     sentimentScore?: number,
-    sentimentLabel?: string
+    sentimentLabel?: string,
+    userCrisisHistory?: number
 ): {
     isCrisis: boolean;
     severity: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -175,11 +177,23 @@ export function detectCrisis(
         sentimentCrisis = detectCrisisSentiment(sentimentScore, sentimentLabel);
     }
 
+    // Context-aware severity adjustment
+    let adjustedSeverity = keywordResult.severity;
+
+    // If user has crisis history, lower the threshold for intervention
+    if (userCrisisHistory && userCrisisHistory > 0) {
+        if (adjustedSeverity === 'medium') {
+            adjustedSeverity = 'high'; // Escalate medium to high for at-risk users
+        } else if (adjustedSeverity === 'low' && sentimentScore && sentimentScore < -0.4) {
+            adjustedSeverity = 'medium'; // Be more cautious with warning signs
+        }
+    }
+
     // Determine if intervention is required
     const isCrisis = keywordResult.isCrisis || sentimentCrisis;
     const requiresIntervention =
-        keywordResult.severity === 'high' ||
-        keywordResult.severity === 'critical' ||
+        adjustedSeverity === 'high' ||
+        adjustedSeverity === 'critical' ||
         sentimentCrisis;
 
     // Determine reason
@@ -194,9 +208,14 @@ export function detectCrisis(
         reason = 'No crisis detected';
     }
 
+    // Add context note if history influenced decision
+    if (userCrisisHistory && userCrisisHistory > 0 && adjustedSeverity !== keywordResult.severity) {
+        reason += ' (elevated due to crisis history)';
+    }
+
     return {
         isCrisis,
-        severity: keywordResult.severity,
+        severity: adjustedSeverity,
         reason,
         matchedPhrases: keywordResult.matchedPhrases,
         requiresIntervention,

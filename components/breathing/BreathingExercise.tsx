@@ -136,10 +136,10 @@ export function BreathingExercise() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[600px] p-4">
-            <Card className="w-full max-w-md p-8 text-center">
+            <Card className="w-full max-w-md p-8 text-center bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                 {/* Pattern Selector */}
                 <div className="mb-6">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Choose Pattern
                     </h3>
                     <div className="flex gap-2 justify-center">
@@ -179,13 +179,13 @@ export function BreathingExercise() {
 
                 {/* Instructions */}
                 <div className="mb-6">
-                    <h3 className="font-semibold text-gray-900 mb-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                         {currentPattern.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                         {currentPattern.description}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-500">
                         Completed cycles: {completedCycles}
                     </p>
                 </div>
@@ -219,8 +219,8 @@ export function BreathingExercise() {
                 </div>
 
                 {/* Benefits */}
-                <div className="mt-6 p-4 bg-calm-50 rounded-lg border border-calm-200">
-                    <p className="text-sm text-gray-700">
+                <div className="mt-6 p-4 bg-calm-50 dark:bg-calm-900/20 rounded-lg border border-calm-200 dark:border-calm-800">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                         <strong>Benefits:</strong> Reduces anxiety, lowers heart rate, promotes relaxation, and helps you feel grounded.
                     </p>
                 </div>

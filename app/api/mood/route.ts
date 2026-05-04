@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { connectDB } from '@/lib/db';
 import { encrypt, decrypt } from '@/lib/encryption';
-import { analyzeSentiment } from '@/lib/groq';
+import { analyzeSentiment } from '@/lib/openai-client';
 import MoodEntry from '@/models/MoodEntry';
 import User from '@/models/User';
 

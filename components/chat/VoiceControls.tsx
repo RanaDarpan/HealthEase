@@ -16,8 +16,11 @@ export function VoiceControls({ onTranscript, textToSpeak, onSpeakingChange }: V
     const [isSupported, setIsSupported] = useState(false);
     const recognitionRef = useRef<any>(null);
     const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
+    // Store callback in ref to prevent re-initialization on every render
+    const onTranscriptRef = useRef(onTranscript);
+    onTranscriptRef.current = onTranscript;
 
-    // Check browser support on mount
+    // Check browser support on mount (runs only once)
     useEffect(() => {
         const supported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
         setIsSupported(supported);
@@ -31,7 +34,7 @@ export function VoiceControls({ onTranscript, textToSpeak, onSpeakingChange }: V
 
             recognitionRef.current.onresult = (event: any) => {
                 const transcript = event.results[0][0].transcript;
-                onTranscript(transcript);
+                onTranscriptRef.current(transcript);
                 setIsListening(false);
             };
 
@@ -52,7 +55,7 @@ export function VoiceControls({ onTranscript, textToSpeak, onSpeakingChange }: V
                 window.speechSynthesis.cancel();
             }
         };
-    }, [onTranscript]);
+    }, []); // Empty dependency — runs once on mount
 
     // Handle text-to-speech
     useEffect(() => {

@@ -7,9 +7,9 @@ import {
     MessageCircle, Wind, Heart, Shield, Lock, UserX, Sparkles,
     TrendingUp, Users, Clock, BookOpen, Activity, Zap,
     CheckCircle, ChevronDown, Mail, Phone, MapPin, Github,
-    Twitter, Linkedin, ArrowRight, Play, Star
+    Twitter, Linkedin, ArrowRight, Play, Star, X
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const features = [
     {
@@ -458,7 +458,7 @@ export default function HomePage() {
                     <div className="border-t border-gray-700 pt-8">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <p className="text-gray-400 text-sm text-center md:text-left">
-                                © 2025 HealthEase. All rights reserved. Made with ❤️ for mental wellness.
+                                © {new Date().getFullYear()} HealthEase. All rights reserved. Made with ❤️ for mental wellness.
                             </p>
                             <div className="flex gap-6 text-sm text-gray-400">
                                 <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
@@ -471,19 +471,48 @@ export default function HomePage() {
             </footer>
 
             {/* Important Notice */}
-            <div className="fixed bottom-4 right-4 z-40 max-w-sm">
-                <GlassCard className="p-4 border-2 border-yellow-200 dark:border-yellow-800 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/30 dark:to-orange-900/30">
-                    <div className="flex items-start gap-3">
-                        <Sparkles className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                            <p className="text-xs text-yellow-900 dark:text-yellow-200 leading-relaxed">
-                                <strong>Important:</strong> HealthEase is not a replacement for professional care.
-                                In crisis? Call 988 immediately.
-                            </p>
-                        </div>
+            {/* Important Notice — Dismissible */}
+            <DismissibleNotice />
+        </div>
+    );
+}
+
+// Dismissible notice with localStorage persistence
+function DismissibleNotice() {
+    const [dismissed, setDismissed] = useState(true); // Start hidden to prevent flash
+
+    useEffect(() => {
+        const isDismissed = localStorage.getItem('healthease-notice-dismissed');
+        setDismissed(!!isDismissed);
+    }, []);
+
+    const handleDismiss = () => {
+        setDismissed(true);
+        localStorage.setItem('healthease-notice-dismissed', 'true');
+    };
+
+    if (dismissed) return null;
+
+    return (
+        <div className="fixed bottom-4 right-4 z-40 max-w-sm animate-fadeInUp">
+            <GlassCard className="p-4 border-2 border-yellow-200 dark:border-yellow-800 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/30 dark:to-orange-900/30">
+                <div className="flex items-start gap-3">
+                    <Sparkles className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                        <p className="text-xs text-yellow-900 dark:text-yellow-200 leading-relaxed">
+                            <strong>Important:</strong> HealthEase is not a replacement for professional care.
+                            In crisis? Call 988 immediately.
+                        </p>
                     </div>
-                </GlassCard>
-            </div>
+                    <button
+                        onClick={handleDismiss}
+                        className="flex-shrink-0 p-0.5 rounded hover:bg-yellow-200 dark:hover:bg-yellow-800/50 transition-colors"
+                        aria-label="Dismiss notice"
+                    >
+                        <X className="w-4 h-4 text-yellow-700 dark:text-yellow-400" />
+                    </button>
+                </div>
+            </GlassCard>
         </div>
     );
 }

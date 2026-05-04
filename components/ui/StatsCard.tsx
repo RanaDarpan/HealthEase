@@ -50,9 +50,9 @@ export function StatsCard({
     }, [numericValue, animate, value]);
 
     const trendColors = {
-        up: 'text-green-600',
-        down: 'text-red-600',
-        neutral: 'text-gray-600',
+        up: 'text-green-600 dark:text-green-400',
+        down: 'text-red-600 dark:text-red-400',
+        neutral: 'text-gray-600 dark:text-gray-400',
     };
 
     const trendSymbols = {
@@ -65,9 +65,9 @@ export function StatsCard({
         <div className="glass-card p-6 hover:shadow-glass-lg hover:scale-[1.02] transition-all duration-300 group">
             <div className="flex items-start justify-between mb-4">
                 <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</p>
                     <div className="flex items-baseline gap-2">
-                        <h3 className="text-3xl font-bold text-gray-900">
+                        <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
                             {typeof value === 'number' ? displayValue.toFixed(1) : value}
                         </h3>
                         {trend !== 'neutral' && (
@@ -77,7 +77,7 @@ export function StatsCard({
                         )}
                     </div>
                     {subtitle && (
-                        <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>
                     )}
                 </div>
                 <div

@@ -17,11 +17,11 @@ export default function ChatPage() {
                     </div>
                     <div className="flex-1">
                         <h1 className="text-2xl font-bold gradient-text flex items-center gap-2">
-                            AI Chat Companion
+                            Chat with Ease
                             <Sparkles className="w-5 h-5 text-calm-500 dark:text-calm-400 animate-pulse" />
                         </h1>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
-                            Safe, anonymous support available 24/7
+                            Your compassionate companion — always here, always listening 💙
                         </p>
                     </div>
                 </div>

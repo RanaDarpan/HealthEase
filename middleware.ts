@@ -1,73 +1,93 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Rate limiting storage (in-memory for development)
-// In production, use Redis or similar
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+/**
+ * In-memory rate limiter with automatic cleanup.
+ * NOTE: For production behind load balancers, use Redis (Upstash) instead.
+ */
+const rateLimitMap = new Map<string, { count: number; firstRequest: number }>();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 30;
+const MAX_MESSAGE_LENGTH = 5000; // Max chars per message
 
-const RATE_LIMIT = {
-    windowMs: 60 * 1000, // 1 minute
-    maxRequests: 30, // 30 requests per minute
-};
+// Cleanup expired entries every 5 minutes to prevent memory leak
+const CLEANUP_INTERVAL = 5 * 60 * 1000;
+let lastCleanup = Date.now();
 
-function getRateLimitKey(req: NextRequest): string {
-    // Use IP address or session ID for rate limiting
-    const forwarded = req.headers.get('x-forwarded-for');
-    const ip = forwarded ? forwarded.split(',')[0] : req.ip || 'unknown';
-    return `rate-limit:${ip}`;
+function cleanupExpiredEntries() {
+    const now = Date.now();
+    if (now - lastCleanup < CLEANUP_INTERVAL) return;
+
+    lastCleanup = now;
+    const keys = Array.from(rateLimitMap.keys());
+    for (const key of keys) {
+        const value = rateLimitMap.get(key);
+        if (value && now - value.firstRequest > RATE_LIMIT_WINDOW) {
+            rateLimitMap.delete(key);
+        }
+    }
 }
 
-function checkRateLimit(key: string): boolean {
-    const now = Date.now();
-    const record = rateLimitMap.get(key);
+function rateLimit(ip: string): boolean {
+    cleanupExpiredEntries();
 
-    if (!record || now > record.resetTime) {
-        // New window
-        rateLimitMap.set(key, {
-            count: 1,
-            resetTime: now + RATE_LIMIT.windowMs,
-        });
+    const now = Date.now();
+    const entry = rateLimitMap.get(ip);
+
+    if (!entry || now - entry.firstRequest > RATE_LIMIT_WINDOW) {
+        rateLimitMap.set(ip, { count: 1, firstRequest: now });
         return true;
     }
 
-    if (record.count >= RATE_LIMIT.maxRequests) {
-        // Rate limit exceeded
+    if (entry.count >= MAX_REQUESTS) {
         return false;
     }
 
-    // Increment count
-    record.count++;
+    entry.count++;
     return true;
 }
 
-export function middleware(req: NextRequest) {
-    // Apply rate limiting to API routes
-    if (req.nextUrl.pathname.startsWith('/api/')) {
-        const key = getRateLimitKey(req);
-        const allowed = checkRateLimit(key);
+/**
+ * Security headers applied to all routes
+ */
+const securityHeaders = {
+    'X-DNS-Prefetch-Control': 'on',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'X-Content-Type-Options': 'nosniff',
+    'X-XSS-Protection': '1; mode=block',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(self), geolocation=()',
+};
 
-        if (!allowed) {
+export function middleware(request: NextRequest) {
+    const response = NextResponse.next();
+
+    // Apply security headers
+    Object.entries(securityHeaders).forEach(([key, value]) => {
+        response.headers.set(key, value);
+    });
+
+    // Rate limit API routes
+    if (request.nextUrl.pathname.startsWith('/api/')) {
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+            request.headers.get('x-real-ip') ||
+            'unknown';
+
+        if (!rateLimit(ip)) {
             return NextResponse.json(
-                { error: 'Too many requests. Please try again later.' },
+                {
+                    error: 'Too many requests. Please wait a moment before trying again.',
+                    retryAfter: Math.ceil(RATE_LIMIT_WINDOW / 1000),
+                },
                 { status: 429 }
             );
         }
     }
-
-    // Add security headers
-    const response = NextResponse.next();
-
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-    response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-    response.headers.set('X-XSS-Protection', '1; mode=block');
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
     return response;
 }
 
 export const config = {
     matcher: [
-        '/api/:path*',
         '/((?!_next/static|_next/image|favicon.ico).*)',
     ],
 };
